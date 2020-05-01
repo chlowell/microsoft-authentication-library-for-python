@@ -7,6 +7,8 @@ import logging
 
 from .exceptions import MsalServiceError
 
+import requests
+_requests = requests
 
 logger = logging.getLogger(__name__)
 WORLD_WIDE = 'login.microsoftonline.com'  # There was an alias login.windows.net
@@ -42,7 +44,10 @@ class Authority(object):
             This parameter only controls whether an instance discovery will be
             performed.
         """
-        self.http_client = http_client
+        if requests is not _requests:
+            self.http_client = requests
+        else:
+            self.http_client = http_client
         authority, self.instance, tenant = canonicalize(authority_url)
         parts = authority.path.split('/')
         is_b2c = any(self.instance.endswith("." + d) for d in WELL_KNOWN_B2C_HOSTS) or (

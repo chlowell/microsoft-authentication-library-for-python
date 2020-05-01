@@ -128,6 +128,14 @@ class BaseClient(object):
                 # A workaround for requests not supporting session-wide timeout
                 self.http_client.request, timeout=timeout)
 
+    @property
+    def session(self):
+        return self.http_client
+
+    @session.setter
+    def session(self, value):
+        self.http_client = value
+
     def _build_auth_request_params(self, response_type, **kwargs):
         # response_type is a string defined in
         #   https://tools.ietf.org/html/rfc6749#section-3.1.1
